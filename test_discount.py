@@ -1,18 +1,15 @@
+import pytest
 from discount import calculate_discount
 
 def test_vip_customer():
-    # Hàm này tương tự assertEqual trong JAVA là kỳ vọng hàm calculate_discount(60000000) phải trả về 0.1
-    assert calculate_discount(60000000) == 0.1
+    # TC01: Đã là khách VIP (60M), đơn mới 2M -> Giảm 10%
+    assert calculate_discount(2000000, 60000000) == 0.1 
 
 def test_normal_customer():
-    # Kỳ vọng hàm calculate_discount(30000000) phải trả về 0
-    assert calculate_discount(30000000) == 0
+    # TC02: Chưa đủ điều kiện (30M), đơn mới 2M -> Không giảm (0)
+    assert calculate_discount(2000000, 30000000) == 0 
 
-def test_tc01():
-    assert calculate_discount(60000000) == 0.1
-
-def test_tc02():
-    assert calculate_discount(30000000) == 0
-
-def test_tc03():
-    assert calculate_discount(49000000) == 0.1
+def test_boundary_case():
+    # TC03: Cận biên (49M), đơn mới 2M làm tổng đạt 51M -> Phải giảm 10%
+    # Đây là test case quan trọng nhất để phát hiện bug [3]
+    assert calculate_discount(2000000, 49000000) == 0.1 
